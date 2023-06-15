@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<script type="text/javascript" src="//code.jquery.com/jquery-2.2.4.min.js"></script>
+<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.5.1/css/bootstrap.min.css" rel="stylesheet"/>
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.5.1/js/bootstrap.min.js"></script>
+<link href="//use.fontawesome.com/releases/v5.8.1/css/all.css" rel="stylesheet"/>
+
+<title>Rinna Koeiromap Sample</title>
+<style type="text/css">
+html, body{
+  text-align: center;
+  background-color: #fafafa;
+  font-size: 20px;
+  color: #333;
+}
+#text{
+  width: 80%;
+  height: 200px;
+}
+</style>
+<script>
+$(function(){
+});
+
+function talkKoeiromap(){
+  var text = $('#text').val();
+  var speaker_x = parseFloat( $('#speaker_x').val() );
+  var speaker_y = parseFloat( $('#speaker_y').val() );
+  var style = $('#style').val();
+  var data = {
+    text: text,
+    speaker_x: speaker_x,
+    speaker_y: speaker_y,
+    style: style
+  };
+
+  $.ajax({
+    url: '/api/infer',
+    type: 'POST',
+    data: data,
+    success: function( r ){
+      if( r && r.status && r.result ){
+        var phonemes = r.result.phonemes;
+        phonemes = phonemes.slice( 1, phonemes.length - 1 );
+        console.log( phonemes )
+        var audio = r.result.audio;
+        var voice = new Audio( audio );
+        voice.play();
+      }
+    },
+    error: function( e0, e1, e2 ){
+      console.log( e0, e1, e2 );
+    }
+  })
+}
+</script>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <a class="navbar-brand" href="#">Rinna Koeiromap Sample</a>
+</nav>
+
+<div class="container" style="position: relative; top: 40px;">
+  <form id="koeiromap-form">
+    <div class="koeiromap-input">
+      <p><textarea name="text" id="text"></textarea></p>
+      <p><label for="speaker_x">テンション</label><input type="range" name="speaker_x" id="speaker_x" value="3.0" min="-10.0" max="10.0" step="0.1"/></p>
+      <p><label for="speaker_y">声</label><input type="range" name="speaker_y" id="speaker_y" value="5.0" min="-10.0" max="10.0" step="0.1"/></p>
+      <p>
+        <label for="style">スタイル</label>
+        <select name="style" id="style">
+          <option value="talk">talk</option>
+          <option value="happy">happy</option>
+          <option value="sad">sad</option>
+        </select>
+      </p>
+      <p>
+        <input type="button" class="btn btn-primary" value="Koeiromap" onClick="talkKoeiromap();"/>
+      </p>
+    </div>
+    <div class="koeiromap-result"></div>
+  </form>
+</div>
+
+</body>
+</html>

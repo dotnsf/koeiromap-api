@@ -1,0 +1,18 @@
+{
+    "name": "koeiromap-api",
+    "version": "0.0.1",
+    "scripts": {
+        "start": "node app.js"
+    },
+    "dependencies": {
+        "axios": "^1.4.0",
+        "body-parser": "^1.20.1",
+        "dotenv": "^16.0.3",
+        "express": "^4.18.2",
+        "express-form-data": "^2.0.22"
+    },
+    "repository": {},
+    "engines": {
+        "node": "16.x"
+    }
+}

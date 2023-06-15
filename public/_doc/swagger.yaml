@@ -1,0 +1,55 @@
+swagger: '2.0'
+info:
+  description: Koeiromap API ドキュメント
+  version: 0.0.1
+  title: Koeiromap API REST APIs
+#host: xxxx.herokuapp.com
+basePath: /api
+tags:
+  - name: koeiromap
+    description: Koeiromap API
+schemes:
+  - http
+  - https
+paths:
+  /infer:
+    post:
+      tags:
+        - koeiromap
+      summary: Speech
+      description: Speech API
+      produces:
+        - application/json
+      consumes:
+        - multipart/form-data
+      parameters:
+        - name: text
+          in: formData
+          type: string
+          description: （日本語）テキスト
+          required: true
+        - name: speaker_x
+          in: formData
+          type: number
+          description: (テンション低-10.0～10.0高 デフォルト=0.0)
+        - name: speaker_y
+          in: formData
+          type: number
+          description: (声低-10.0～10.0高 デフォルト=0.0)
+        - name: style
+          in: formData
+          type: string
+          enum: [ "talk", "happy", "sad", "angry", "fear", "suprised", "whisper" ]
+          description: 感情スタイル
+          required: true
+        - name: output_format
+          in: formData
+          type: string
+          enum: [ "mp3", "opus", "wav" ]
+          description: 出力フォーマット
+          required: true
+      responses:
+        '200':
+          description: 成功
+        '400':
+          description: エラー
